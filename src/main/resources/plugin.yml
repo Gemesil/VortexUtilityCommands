@@ -1,0 +1,43 @@
+name: VortexUtilityCommands
+version: '${project.version}'
+main: gemesil.vortexutilitycommands.VortexUtilityCommands
+api-version: 1.19
+authors: [ Gemesil ]
+description: Adds some useful misc commands to the server
+depend: [VortexLogger]
+commands:
+
+  god:
+    description: Toggle god mode
+    usage: "Usage: /<command>"
+
+  mend:
+    description: Fully heal and sate your hunger
+    aliases:
+      - feed
+      - heal
+    usage: "Usage: /<command>"
+
+  gmc:
+    description: Change game mode to creative
+    aliases:
+      - creative
+    usage: "Usage: /<command>"
+
+  gms:
+    description: Change game mode to survival
+    aliases:
+      - survival
+    usage: "Usage: /<command>"
+
+  vanish:
+    description: Hide yourself from other players
+    aliases:
+      - v
+    usage: "Usage: /<command> [info]"
+
+  fly:
+    description: Toggle flight in survival mode
+    aliases:
+      - f
+    usage: "Usage: /<command>"
