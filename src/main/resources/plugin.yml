@@ -41,3 +41,9 @@ commands:
     aliases:
       - f
     usage: "Usage: /<command>"
+
+  inv:
+    description: Peak inside another players inventory
+    aliases:
+      - inventory
+    usage: "Usage: /<command> player_name"

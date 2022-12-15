@@ -1,7 +1,10 @@
 package gemesil.vortexutilitycommands.commands;
 
 import gemesil.vortexlogger.VortexLogger;
+import gemesil.vortexutilitycommands.objects.GuiItem;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class Inv implements CommandExecutor, Listener {
 
@@ -47,7 +54,7 @@ public class Inv implements CommandExecutor, Listener {
         for (Player currentOnlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
 
             // If the player who the commandSender is trying to get is online
-            if (args[0].equals(targetPlayer.getName())) {
+            if (args[0].equals(currentOnlinePlayer.getName())) {
 
                 // Get the player object and exit the loop
                 targetPlayer = currentOnlinePlayer;
@@ -65,19 +72,56 @@ public class Inv implements CommandExecutor, Listener {
 
         // Now we know our player is online
         // Lets get their inventory
-        Inventory targetInventory = targetPlayer.getInventory();
+        PlayerInventory targetInventory = targetPlayer.getInventory();
 
         // We would like to display their inventory to the commandSender
         // So we will create an inventory-like GUI and copy the contents from targetInventory
-        invGUI = Bukkit.createInventory(targetPlayer, targetInventory.getSize(), targetPlayer.getName() + "'s Inventory");
+        invGUI = Bukkit.createInventory(targetPlayer, 54, targetPlayer.getName() + "'s Inventory");
 
+        // GUI for armor slots
+        invGUI.setItem(45,
+            new GuiItem(
+                Material.PAPER,
+                ChatColor.LIGHT_PURPLE + "Armor",
+                Arrays.asList(
+                    "Armor that " + targetPlayer.getName() + " is wearing."
+                )
+            ).getItem()
+        );
+
+        // GUI for 2nd Hand item
+        invGUI.setItem(36,
+                new GuiItem(
+                        Material.PAPER,
+                        ChatColor.LIGHT_PURPLE + "Armor",
+                        Arrays.asList(
+                                "Armor that " + targetPlayer.getName() + " is wearing."
+                                )
+                ).getItem()
+        );
 
         // Add the items from targetInventory to our fake inventory GUI
-//        for (ItemStack currentItem : targetInventory.getContents()) {
-//
-//        }
+        for (int i = 0; i < targetInventory.getSize(); i++) {
+
+            // When we have reached the armor and 2nd hand slots
+            if (i > 35) {
+                // Move them one row under
+                invGUI.setItem(i + 10, targetInventory.getItem(i));
+            }
+
+            else
+                invGUI.setItem(i, targetInventory.getItem(i));
+        }
+
+        // Check if the targetPlayer has an item in their 2nd hand
+        if (!targetInventory.getItemInOffHand().equals(new ItemStack(Material.AIR))) {
+
+            // TODO check 2nd item slot
+            targetInventory.getHeldItemSlot();
+        }
 
         // Display inventroy in GUI for command sender
+        p.openInventory(invGUI);
 
         // Any item command sender touches in GUI updates inventory of player
 
@@ -87,10 +131,10 @@ public class Inv implements CommandExecutor, Listener {
     @EventHandler
     public void onInventoryClick (InventoryClickEvent e) {
 
-        // If the inventory is not of our target it doesnt matter
+        // If the inventory is not our custom inventory, it doesnt matter
         if (!e.getInventory().equals(invGUI)) return;
 
-        // Prevent the click
+        // Dont let the player move anything in the inventory
         e.setCancelled(true);
     }
 }
