@@ -3,6 +3,7 @@ package gemesil.vortexutilitycommands.objects;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -13,10 +14,13 @@ public class GuiItem {
     // - CONSTRUCTOR -
     public GuiItem (Material type, String name, List<String> lore) {
         ItemStack item = new ItemStack(type);
+        ItemMeta itemMeta = item.getItemMeta();
 
-        item.getItemMeta().setDisplayName(name);
-        item.getItemMeta().setLore(lore);
-        item.getItemMeta().addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        itemMeta.setDisplayName(name);
+        itemMeta.setLore(lore);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        item.setItemMeta(itemMeta);
 
         this.item = item;
     }

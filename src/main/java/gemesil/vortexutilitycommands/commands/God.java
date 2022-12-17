@@ -1,6 +1,7 @@
 package gemesil.vortexutilitycommands.commands;
 
 import gemesil.vortexlogger.VortexLogger;
+import gemesil.vortexutilitycommands.VortexUtilityCommands;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -10,18 +11,12 @@ import org.bukkit.entity.Player;
 
 public class God implements CommandExecutor {
 
-    private final VortexLogger vortexLogger;
-
-    public God(VortexLogger vortexLogger) {
-        this.vortexLogger = vortexLogger;
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         // Check if the executor is not a player
         if (!(sender instanceof Player)) {
-            vortexLogger.sendAlert("Must be a player to execute this command!");
+            VortexUtilityCommands.getVortexLogger().sendAlert("Must be a player to execute this command!");
             return true;
         }
 
@@ -29,7 +24,7 @@ public class God implements CommandExecutor {
 
         // Check if player has permission for command
         if (!p.hasPermission("god.use_command")) {
-            vortexLogger.sendNoPermsMsg(p);
+            VortexUtilityCommands.getVortexLogger().sendNoPermsMsg(p);
             return true;
         }
 
@@ -39,10 +34,10 @@ public class God implements CommandExecutor {
 
                 // Show current god status in chat
                 if (p.isInvulnerable())
-                    vortexLogger.sendChat(p, "GOD mode is currently enabled", true);
+                    VortexUtilityCommands.getVortexLogger().sendChat(p, "GOD mode is currently enabled", true);
 
                 else
-                    vortexLogger.sendChat(p, "GOD mode is currently disabled", true);
+                    VortexUtilityCommands.getVortexLogger().sendChat(p, "GOD mode is currently disabled", true);
 
                 return true;
             }
@@ -65,12 +60,12 @@ public class God implements CommandExecutor {
                 p.setFoodLevel(20);
             }
 
-            vortexLogger.sendActionBar(p, ChatColor.GREEN + "Entered GOD mode");
+            VortexUtilityCommands.getVortexLogger().sendActionBar(p, ChatColor.GREEN + "Entered GOD mode");
         }
 
         // God mode is turned off
         else
-            vortexLogger.sendActionBar(p, "Back to being just another mortal..");
+            VortexUtilityCommands.getVortexLogger().sendActionBar(p, "Back to being just another mortal..");
 
         return true;
     }

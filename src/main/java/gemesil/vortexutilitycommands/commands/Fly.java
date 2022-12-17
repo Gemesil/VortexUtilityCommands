@@ -1,6 +1,7 @@
 package gemesil.vortexutilitycommands.commands;
 
 import gemesil.vortexlogger.VortexLogger;
+import gemesil.vortexutilitycommands.VortexUtilityCommands;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
@@ -10,18 +11,12 @@ import org.bukkit.entity.Player;
 
 public class Fly implements CommandExecutor {
 
-    private final VortexLogger vortexLogger;
-
-    public Fly(VortexLogger vortexLogger) {
-        this.vortexLogger = vortexLogger;
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         // Check if the executor is not a player
         if (!(sender instanceof Player)) {
-            vortexLogger.sendAlert("Must be a player to execute this command!");
+            VortexUtilityCommands.getVortexLogger().sendAlert("Must be a player to execute this command!");
             return true;
         }
 
@@ -29,7 +24,7 @@ public class Fly implements CommandExecutor {
 
         // Check if player has permission for command
         if (!p.hasPermission("fly.use_command")) {
-            vortexLogger.sendNoPermsMsg(p);
+            VortexUtilityCommands.getVortexLogger().sendNoPermsMsg(p);
             return true;
         }
 
@@ -40,12 +35,12 @@ public class Fly implements CommandExecutor {
         // Fly mode is turned on
         if (p.getAllowFlight()) {
 
-            vortexLogger.sendActionBar(p, ChatColor.GREEN + "Flying is now enabled");
+            VortexUtilityCommands.getVortexLogger().sendActionBar(p, ChatColor.GREEN + "Flying is now enabled");
         }
 
         // Fly mode is turned off
         else
-            vortexLogger.sendActionBar(p, ChatColor.RED + "Flying is now disabled");
+            VortexUtilityCommands.getVortexLogger().sendActionBar(p, ChatColor.RED + "Flying is now disabled");
 
         return true;
     }

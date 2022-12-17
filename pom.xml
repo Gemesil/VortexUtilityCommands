@@ -40,7 +40,9 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <outputFile>/mnt/mcPlugins/TestServer/plugins/VortexUtilityCommands.jar</outputFile>
+                            <outputFile>C:\Users\ofeky\Desktop\test-server\plugins\VortexUtilityCommands.jar</outputFile>
+                            <!-- C:\Users\ofeky\Desktop\test-server\plugins\VortexUtilityCommands.jar -->
+                            <!-- /mnt/mcPlugins/TestServer/plugins/VortexUtilityCommands.jar -->
                         </configuration>
                     </execution>
                 </executions>

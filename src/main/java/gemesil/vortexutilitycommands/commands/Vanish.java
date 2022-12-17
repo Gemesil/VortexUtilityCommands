@@ -1,6 +1,5 @@
 package gemesil.vortexutilitycommands.commands;
 
-import gemesil.vortexlogger.VortexLogger;
 import gemesil.vortexutilitycommands.VortexUtilityCommands;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,14 +16,6 @@ import java.util.ArrayList;
 
 public class Vanish implements CommandExecutor, Listener {
 
-    private final VortexLogger vortexLogger;
-    private final VortexUtilityCommands plugin;
-
-    public Vanish(VortexUtilityCommands plugin, VortexLogger vortexLogger) {
-        this.vortexLogger = vortexLogger;
-        this.plugin = plugin;
-    }
-
     public ArrayList<Player> playersInVanish = new ArrayList<>();
     // TODO make db for players in vanish so it doesnt reset on leave
 
@@ -33,7 +24,7 @@ public class Vanish implements CommandExecutor, Listener {
 
         // Check if the executor is not a player
         if (!(sender instanceof Player)) {
-            vortexLogger.sendAlert("Must be a player to execute this command!");
+            VortexUtilityCommands.getVortexLogger().sendAlert("Must be a player to execute this command!");
             return true;
         }
 
@@ -41,7 +32,7 @@ public class Vanish implements CommandExecutor, Listener {
 
         // Check if player has permission for command
         if (!p.hasPermission("vanish.use_command")) {
-            vortexLogger.sendNoPermsMsg(p);
+            VortexUtilityCommands.getVortexLogger().sendNoPermsMsg(p);
             return true;
         }
 
@@ -51,10 +42,10 @@ public class Vanish implements CommandExecutor, Listener {
 
                 // Show current vanish status in chat
                 if (playersInVanish.contains(p))
-                    vortexLogger.sendChat(p, "Vanish mode is currently enabled", true);
+                    VortexUtilityCommands.getVortexLogger().sendChat(p, "Vanish mode is currently enabled", true);
 
                 else
-                    vortexLogger.sendChat(p, "Vanish mode is currently disabled", true);
+                    VortexUtilityCommands.getVortexLogger().sendChat(p, "Vanish mode is currently disabled", true);
 
                 return true;
             }
@@ -83,14 +74,14 @@ public class Vanish implements CommandExecutor, Listener {
 
             // If the player is not allowed to see vanished players, hide the player that is in vanish
             if (!onlinePlayer.hasPermission("vanish.see_vanished_players"))
-                onlinePlayer.hidePlayer(plugin, p);
+                onlinePlayer.hidePlayer(VortexUtilityCommands.getPlugin(), p);
 
         // Add the command executor to the players in vanish list
         playersInVanish.add(p);
 
         if (sendMsg)
             // Show actionbar message to indicate vanish mode
-            vortexLogger.sendActionBar(p, ChatColor.GREEN + "Now in Vanish mode");
+            VortexUtilityCommands.getVortexLogger().sendActionBar(p, ChatColor.GREEN + "Now in Vanish mode");
     }
 
     // Used in order to exit vanish
@@ -100,13 +91,13 @@ public class Vanish implements CommandExecutor, Listener {
         for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers())
 
             if (!onlinePlayer.hasPermission("vanish.see_vanished_players"))
-                onlinePlayer.showPlayer(plugin, p);
+                onlinePlayer.showPlayer(VortexUtilityCommands.getPlugin(), p);
 
         playersInVanish.remove(p);
 
         if (sendMsg)
             // Show actionbar message to indicate vanish mode
-            vortexLogger.sendActionBar(p, "No longer in Vanish mode");
+            VortexUtilityCommands.getVortexLogger().sendActionBar(p, "No longer in Vanish mode");
     }
 
     @EventHandler
@@ -116,7 +107,7 @@ public class Vanish implements CommandExecutor, Listener {
         for (Player p : playersInVanish)
 
             if (e.getPlayer() != p)
-                e.getPlayer().hidePlayer(plugin, p);
+                e.getPlayer().hidePlayer(VortexUtilityCommands.getPlugin(), p);
     }
 
     @EventHandler
@@ -126,6 +117,6 @@ public class Vanish implements CommandExecutor, Listener {
         for (Player p : playersInVanish)
 
             if (e.getPlayer() != p)
-                e.getPlayer().showPlayer(plugin, p);
+                e.getPlayer().showPlayer(VortexUtilityCommands.getPlugin(), p);
     }
 }

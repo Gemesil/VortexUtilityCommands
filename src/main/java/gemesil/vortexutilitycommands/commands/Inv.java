@@ -1,10 +1,12 @@
 package gemesil.vortexutilitycommands.commands;
 
 import gemesil.vortexlogger.VortexLogger;
+import gemesil.vortexutilitycommands.VortexUtilityCommands;
 import gemesil.vortexutilitycommands.objects.GuiItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,18 +24,13 @@ import java.util.Arrays;
 public class Inv implements CommandExecutor, Listener {
 
     private Inventory invGUI;
-    private final VortexLogger vortexLogger;
-
-    public Inv(VortexLogger vortexLogger) {
-        this.vortexLogger = vortexLogger;
-    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         // Check if the executor is not a player
         if (!(sender instanceof Player)) {
-            vortexLogger.sendAlert("Must be a player to execute this command!");
+            VortexUtilityCommands.getVortexLogger().sendAlert("Must be a player to execute this command!");
             return true;
         }
 
@@ -41,7 +38,7 @@ public class Inv implements CommandExecutor, Listener {
 
         // Check if player has permission for command
         if (!p.hasPermission("inv.use_command")) {
-            vortexLogger.sendNoPermsMsg(p);
+            VortexUtilityCommands.getVortexLogger().sendNoPermsMsg(p);
             return true;
         }
 
@@ -66,7 +63,7 @@ public class Inv implements CommandExecutor, Listener {
         if (targetPlayer == null) {
 
             // Alert the command sender they suck
-            vortexLogger.sendChat(p, "Player " + args[0] + " is either not online, or doesn't actually exist!", true);
+            VortexUtilityCommands.getVortexLogger().sendChat(p, "Player " + args[0] + " is either not online, or doesn't actually exist!", true);
             return true;
         }
 
@@ -78,50 +75,31 @@ public class Inv implements CommandExecutor, Listener {
         // So we will create an inventory-like GUI and copy the contents from targetInventory
         invGUI = Bukkit.createInventory(targetPlayer, 54, targetPlayer.getName() + "'s Inventory");
 
-        // GUI for armor slots
-        invGUI.setItem(45,
-            new GuiItem(
-                Material.PAPER,
-                ChatColor.LIGHT_PURPLE + "Armor",
-                Arrays.asList(
-                    "Armor that " + targetPlayer.getName() + " is wearing."
-                )
-            ).getItem()
-        );
+        // Add some custom items (Armor & Currently Held paper indicators)
+        setCustomItems(targetPlayer);
 
-        // GUI for 2nd Hand item
-        invGUI.setItem(36,
-                new GuiItem(
-                        Material.PAPER,
-                        ChatColor.LIGHT_PURPLE + "Armor",
-                        Arrays.asList(
-                                "Armor that " + targetPlayer.getName() + " is wearing."
-                                )
-                ).getItem()
-        );
+        // Fill row with glass panes
+        fillRowWithItem(4, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
 
-        // Add the items from targetInventory to our fake inventory GUI
-        for (int i = 0; i < targetInventory.getSize(); i++) {
+        // Copy the inventory of our target player to our fake inventory GUI
+        copyInventory(targetInventory);
 
-            // When we have reached the armor and 2nd hand slots
-            if (i > 35) {
-                // Move them one row under
-                invGUI.setItem(i + 10, targetInventory.getItem(i));
-            }
-
-            else
-                invGUI.setItem(i, targetInventory.getItem(i));
+        // If holding an item in main hand -> set it at invGUI slot
+        if (!targetInventory.getItemInMainHand().equals(new ItemStack(Material.AIR))) {
+            invGUI.setItem(52, targetInventory.getItemInMainHand());
         }
 
-        // Check if the targetPlayer has an item in their 2nd hand
+        // If holding an item in 2nd hand -> set it at invGUI slot
         if (!targetInventory.getItemInOffHand().equals(new ItemStack(Material.AIR))) {
-
-            // TODO check 2nd item slot
-            targetInventory.getHeldItemSlot();
+            invGUI.setItem(51, targetInventory.getItemInOffHand());
         }
 
-        // Display inventroy in GUI for command sender
+        // Generally, always set slot 50 to be a "separator"
+        invGUI.setItem(50, new ItemStack(Material.BLACK_STAINED_GLASS_PANE));
+
+        // Display inventory in GUI for command sender
         p.openInventory(invGUI);
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 0.6f, 1.5f);
 
         // Any item command sender touches in GUI updates inventory of player
 
@@ -136,5 +114,63 @@ public class Inv implements CommandExecutor, Listener {
 
         // Dont let the player move anything in the inventory
         e.setCancelled(true);
+    }
+
+    public void setCustomItems(Player targetPlayer) {
+
+        // GUI item for currently held items
+        invGUI.setItem(53,
+                new GuiItem(
+                        Material.PAPER,
+                        ChatColor.LIGHT_PURPLE + "Items in hands",
+                        Arrays.asList(
+                                ChatColor.GRAY + "The items that " + targetPlayer.getName() + " is holding."
+                        )
+                ).getItem()
+        );
+
+        // GUI item for armor slots
+        invGUI.setItem(45,
+                new GuiItem(
+                        Material.PAPER,
+                        ChatColor.LIGHT_PURPLE + "Armor",
+                        Arrays.asList(
+                                ChatColor.GRAY + "Armor that " + targetPlayer.getName() + " is wearing."
+                        )
+                ).getItem()
+        );
+    }
+
+    public void fillRowWithItem(Integer row, ItemStack item) {
+
+        int rowIndex = row * 9;
+
+        // Check if we aren't going over the size of our inventory
+        if (invGUI.getSize() >= rowIndex + 9)
+
+            // Set the item on all the slots in the row
+            for (int i = rowIndex; i < rowIndex + 9; i++) {
+                invGUI.setItem(i, item);
+            }
+
+        else
+            VortexUtilityCommands.getVortexLogger().sendAlert("ERROR Row goes over bounds of inventory!");
+    }
+
+    public void copyInventory(PlayerInventory inventoryToCopy) {
+
+        for (int i = 0; i < inventoryToCopy.getSize(); i++) {
+
+            // When we have reached slots that contain the armor of the player
+            if (i > 35) {
+
+                // Move them one row under
+                //targetPlayer.
+                invGUI.setItem(i + 10, inventoryToCopy.getItem(i));
+            }
+
+            else
+                invGUI.setItem(i, inventoryToCopy.getItem(i));
+        }
     }
 }
