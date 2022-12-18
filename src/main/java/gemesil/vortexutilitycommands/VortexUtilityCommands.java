@@ -2,6 +2,7 @@ package gemesil.vortexutilitycommands;
 
 import gemesil.vortexlogger.VortexLogger;
 import gemesil.vortexutilitycommands.commands.*;
+import gemesil.vortexutilitycommands.events.CancelNormalCommands;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,9 +39,13 @@ public final class VortexUtilityCommands extends JavaPlugin {
         getCommand("vanish").setExecutor(vanishClass);
         getCommand("fly").setExecutor(new Fly());
         getCommand("inv").setExecutor(new Inv());
+        getCommand("msg").setExecutor(new Msg());
+        getCommand("broadcast").setExecutor(new Broadcast());
+        getCommand("op").setExecutor(new Op());
 
         // Register events
         Bukkit.getServer().getPluginManager().registerEvents(vanishClass, this);
+        Bukkit.getServer().getPluginManager().registerEvents(new CancelNormalCommands(), this);
     }
 
     public static VortexUtilityCommands getPlugin() {

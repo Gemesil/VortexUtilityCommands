@@ -47,3 +47,21 @@ commands:
     aliases:
       - inventory
     usage: "Usage: /<command> player_name"
+
+  broadcast:
+    description: Send a message to the entire server
+    aliases:
+      - bc
+    usage: "Usage: /<command> your_message"
+
+  msg:
+    description: Send a private message to another player
+    aliases:
+      - message
+      - m
+      - whisper
+    usage: "Usage: /<command> player_name your_message"
+
+  op:
+    description: Give a player operator permissions
+    usage: "Usage: /<command> player_name"
