@@ -1,5 +1,5 @@
 # What is it?
-Minecraft plugin coded by Ofek Buchnik that adds a bunch of useful commands
+Minecraft plugin coded by Ofek Buchnik that adds a bunch of useful commands.
 
 ## Commands
 #### /god
