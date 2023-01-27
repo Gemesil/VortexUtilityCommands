@@ -32,3 +32,6 @@ Send a private message to another player
 
 #### /op [player name]:
 Give a player operator permissions. **This command only works from console! (to prevent abuse)**
+
+## Dependencies
+- VortexLogger - Handles plugin-to-player messages like hotbar pop ups or chat notifications. [You can download VortexLogger here](https://github.com/Gemesil/VortexLogger/releases/tag/v1.0.0).
