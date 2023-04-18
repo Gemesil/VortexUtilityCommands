@@ -14,17 +14,17 @@ public class CancelNormalCommands implements Listener {
     For example -> vortexcustomitems:vitem get (This will be blocked by the eventHandler!)
      */
 
-    @EventHandler
-    public void onPlayerCommand (PlayerCommandPreprocessEvent e) {
+//     @EventHandler
+//     public void onPlayerCommand (PlayerCommandPreprocessEvent e) {
 
-        if (e.getMessage().contains(":")) {
-            e.setCancelled(true);
+//         if (e.getMessage().contains(":")) {
+//             e.setCancelled(true);
 
-            String commandMsg = e.getMessage().substring(0, e.getMessage().indexOf(':') + 1);
+//             String commandMsg = e.getMessage().substring(0, e.getMessage().indexOf(':') + 1);
 
-            VortexUtilityCommands.getVortexLogger().sendChat(e.getPlayer(),
-                    "Sorry! Try using /" + e.getMessage().replace(commandMsg, "") + " instead!",
-                    true);
-        }
-    }
+//             VortexUtilityCommands.getVortexLogger().sendChat(e.getPlayer(),
+//                     "Sorry! Try using /" + e.getMessage().replace(commandMsg, "") + " instead!",
+//                     true);
+//         }
+//     }
 }
