@@ -1,3 +1,5 @@
+[![Maven Package](https://github.com/Gemesil/VortexUtilityCommands/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/Gemesil/VortexUtilityCommands/actions/workflows/maven-publish.yml)
+
 # What is it?
 Minecraft plugin coded by Ofek Buchnik that adds a bunch of useful admin commands.
 
