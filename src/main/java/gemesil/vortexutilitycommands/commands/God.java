@@ -54,7 +54,7 @@ public class God implements CommandExecutor {
             if (!p.isDead()) {
 
                 // Set health to full
-                p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
+                p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
                 // Set food to full
                 p.setFoodLevel(20);
